@@ -6,7 +6,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Create directory for model weights
+# Ensure the model directory can be created locally
 RUN mkdir -p /app/model_weights
 
 # Copy application source code

@@ -15,9 +15,8 @@ app = FastAPI(
 )
 
 # ---- Settings & Setup ----
-# Configure Google Drive File ID (replace placeholder with real ID!)
-GDRIVE_FILE_ID = os.getenv("GDRIVE_MODEL_FILE_ID", "YOUR_FILE_ID_HERE")
-MODEL_DIR = "./model_weights"
+MODEL_DIR = "./checkpoint-31074"
+GDRIVE_FOLDER_ID = "19fI48zz8Ch-9K6JyCpERQYtk1PlvqN3J"
 MAX_LENGTH = 512
 
 model = None
@@ -40,12 +39,9 @@ def load_resources():
     # Download weights if not present
     if not os.path.exists(MODEL_DIR) or not os.listdir(MODEL_DIR):
         print(f"Model not found in {MODEL_DIR}. Downloading from Google Drive...")
-        os.makedirs(MODEL_DIR, exist_ok=True)
-        # Note: If the user provides a folder URL, gdown.download_folder can be used instead.
-        # Assuming the check point is zipped in GDrive or we download a zip file here.
-        # Since we don't have the real ID yet, we'll try to load whatever is in the dir.
-        # For production use, replace this block with the proper gdown script.
-        pass 
+        # Note: gdown.download_folder requires the gdown package and folder ID
+        gdown.download_folder(id=GDRIVE_FOLDER_ID, output=MODEL_DIR, quiet=False, use_cookies=False)
+
     
     # Let's see if model is already there (or we rely on Jenkins to have populated it)
     # We will try loading it. If it fails, the app will log an error.
